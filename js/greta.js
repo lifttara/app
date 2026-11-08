@@ -30,8 +30,12 @@ render = function (...args) {
   const r = renderWithoutGreta.apply(this, args);
   const h = location.hash || '#/';
   if ((h === '#/' || h === '#') && !document.getElementById('greta-home')) {
+    const html = gretaHtml(gretaPick(GRETA_TRAINER)).replace('<div class="greta', '<div id="greta-home" class="greta');
+    // Dnes: Greta je prvá v pravom stĺpci (na mobile sa cez CSS order zobrazí hneď pod úvodom)
+    const side = document.querySelector('main .today-side');
     const hero = document.querySelector('#main > .hero, main > .hero');
-    if (hero) hero.insertAdjacentHTML('afterend', gretaHtml(gretaPick(GRETA_TRAINER)).replace('<div class="greta', '<div id="greta-home" class="greta'));
+    if (side) side.insertAdjacentHTML('afterbegin', html);
+    else if (hero) hero.insertAdjacentHTML('afterend', html);
   }
   return r;
 };
