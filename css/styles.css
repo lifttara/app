@@ -2501,3 +2501,23 @@ html body h1 { text-shadow: 3px 3px 0 rgba(198, 42, 60, .45); }
   .today-plan .ex-list > li { margin: 0; }
   .today-side .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+
+/* Redizajn 2 – Cviky, detail cviku a Progres na počítači (na mobile bez zmeny) */
+.ex-grid, .ex-col, .prog-grid, .prog-col { display: contents; }
+@media (min-width: 1100px) {
+  /* knižnica: mriežka kariet namiesto dlhého zoznamu */
+  #lib-list .list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+  #lib-list .list > li { margin: 0; border: 0; }
+  #lib-list .list-item { height: 100%; padding: 12px; border-radius: 14px; background: var(--bg); border: 1px solid var(--border); }
+  #lib-list .list-item:hover { border-color: var(--primary-strong); }
+  #lib-list .ex-cat { margin-top: 18px; }
+  #lib-list .ex-cat:first-child { margin-top: 0; }
+  /* detail cviku: vľavo obrázok a info, vpravo postup a chyby */
+  .ex-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 22px; align-items: start; }
+  .ex-col { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+  .ex-col > * { margin: 0 !important; }
+  /* progres: rekordy s grafom vľavo, merania a návyky vpravo */
+  .prog-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 22px; align-items: start; margin-bottom: 18px; }
+  .prog-col { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+  .prog-col > * { margin: 0 !important; }
+}

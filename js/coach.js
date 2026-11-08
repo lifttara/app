@@ -248,6 +248,7 @@ function viewExercise(id) {
   const best = clientRecords(ME).find((r) => r.exerciseId === e.id);
   return `
   <a href="#/exercises" class="back-link">‹ Cviky</a>
+  <div class="ex-grid"><div class="ex-col">
   <section class="card ex-detail">
     <div class="ex-hero">${exThumb(e)}</div>
     <h1>${esc(e.name)}</h1>
@@ -257,9 +258,11 @@ function viewExercise(id) {
     ${best ? `<p class="ex-best"><b>Tvoj rekord:</b> ${esc(fmtSet(best.best))} · ${fmtShort(best.date)}</p>` : ''}
   </section>
   ${v ? `<section class="card"><div class="card-head"><h2>Video</h2></div>${v.embed ? `<div class="video-wrap"><iframe src="${esc(v.embed)}" title="${esc(e.name)}" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>` : `<a class="btn" href="${esc(v.url)}" target="_blank" rel="noopener">Pozrieť video</a>`}</section>` : ''}
+  </div><div class="ex-col">
   ${tips.length ? `<section class="card"><div class="card-head"><h2>Ako na to</h2></div><ol class="steps">${tips.map((x) => `<li>${esc(x)}</li>`).join('')}</ol></section>` : ''}
   ${k?.mistakes?.length ? `<section class="card"><div class="card-head"><h2>Najčastejšie chyby</h2></div><ul class="mistakes">${k.mistakes.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></section>` : ''}
-  <div class="row" style="margin-top:12px"><button class="btn" data-action="edit-exercise" data-id="${e.id}">Upraviť cvik</button></div>`;
+  <div class="row" style="margin-top:12px"><button class="btn" data-action="edit-exercise" data-id="${e.id}">Upraviť cvik</button></div>
+  </div></div>`;
 }
 
 /* ---------- Návyky (Medium a Pro) ---------- */
@@ -314,8 +317,11 @@ function viewProgress() {
     <div class="stat"><i aria-hidden="true">${IC.calendar}</i><b>${weekStreak()}</b><span>${pl(weekStreak(), 'týždeň', 'týždne', 'týždňov')} v rade</span></div>
     <div class="stat"><i aria-hidden="true">${DUMBBELL}</i><b>${totalVol ? fmtVol(totalVol) : '0'}</b><span>zdvihnuté spolu</span></div>
   </div>
+  <div class="prog-grid"><div class="prog-col">
   ${recordsCard(me)}
+  </div><div class="prog-col">
   ${canTier('medium') ? measureCard(me) + habitsWeekCard() : upsell('medium', 'Merania, fotky a návyky', 'Sleduj váhu a obvody s grafom, porovnávaj fotky progresu a zapisuj si kroky, vodu a spánok.')}
+  </div></div>
   <section class="card" id="sec-history">
     <div class="card-head"><h2>História tréningov</h2>${done.length ? `<span class="badge">${done.length}</span>` : ''}</div>
     ${done.length ? shown.map(historyRow).join('') : '<p class="empty">Zatiaľ žiadny odcvičený tréning. Začni na obrazovke Dnes.</p>'}
