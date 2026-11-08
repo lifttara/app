@@ -146,10 +146,10 @@ function viewToday() {
   const recs = clientRecords(ME);
   const last = doneSessions().slice(-1)[0];
   const target = Number(p.days) || 3;
-  return `
+  return `<div class="today-grid"><div class="today-main">
   <section class="hero hero-photo">
     <div class="hero-top"><span class="eyebrow">${DAYS_LONG[weekday(t)]} · ${fmtShort(t)} ${parseDate(t).getFullYear()}</span></div>
-    <h1 class="hero-title">${greet}${db.settings.trainerName ? `,<br>${esc(db.settings.trainerName.split(' ')[0])}` : ''}</h1>
+    <h1 class="hero-title">${greet}${db.settings.trainerName ? `,<br> ${esc(db.settings.trainerName.split(' ')[0])}` : ''}</h1>
     <p class="hero-sub">${running ? 'Tréning práve beží.' : doneToday ? 'Dnes máš odcvičené. Výborne!' : next ? `Na rade: ${esc(next.name)}` : 'Vytvor si program.'}</p>
     ${next ? `<div class="hero-tiles">
       <div class="hero-tile"><span class="ti" aria-hidden="true">${IC.clock}</span><span class="tv"><strong>~${planMinutes(next)} min</strong><span class="eyebrow">${esc(next.name)}</span></span></div>
@@ -163,6 +163,7 @@ function viewToday() {
     <ol class="list ex-list">${next.items.map((it) => { const e = getExercise(it.exerciseId); const l = exerciseLine(it); return e ? `<li><a class="list-item" href="#/exercise/${e.id}">
       <span class="ex-pic">${exThumb(e)}</span><span class="info"><strong>${esc(e.name)}</strong><small>${esc(l.dose)}</small></span><span aria-hidden="true">›</span></a></li>` : ''; }).join('')}</ol>
   </section>` : ''}
+  </div><div class="today-side">
 
   ${habitsTodayCard()}
 
@@ -180,7 +181,8 @@ function viewToday() {
   ${last ? `<section class="card">
     <div class="card-head"><h2>Posledný tréning</h2><a class="btn small" href="#/progress">Progres ›</a></div>
     ${historyRow(last)}
-  </section>` : ''}`;
+  </section>` : ''}
+  </div></div>`;
 }
 
 /* ---------- Program ---------- */
