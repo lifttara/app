@@ -2521,3 +2521,19 @@ html body h1 { text-shadow: 3px 3px 0 rgba(198, 42, 60, .45); }
   .prog-col { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
   .prog-col > * { margin: 0 !important; }
 }
+
+/* Redizajn 3 – Program a Nastavenia na počítači (na mobile bez zmeny) */
+.set-grid, .set-col { display: contents; }
+@media (min-width: 1100px) {
+  /* tréningové dni ako karty vedľa seba, celé zloženie tréningu viditeľné */
+  .prog-days { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+  .prog-days > .prog-day { margin: 0; align-items: flex-start; padding: 6px; border-radius: 16px; border: 1px solid var(--border); background: var(--bg); }
+  .prog-day .list-item { align-items: flex-start; }
+  .prog-day .info small { white-space: normal; overflow: visible; line-height: 1.5; margin-top: 4px; }
+  .prog-day .icon-btn.play { margin: 8px 6px 0 0; }
+  /* nastavenia: vľavo účet a predplatné, vpravo ostatné */
+  .set-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+  .set-col { display: flex; flex-direction: column; min-width: 0; }
+  .set-col .set-group, .set-col .set-profile { max-width: none; }
+  .set-col > :first-child { margin-top: 0; }
+}
