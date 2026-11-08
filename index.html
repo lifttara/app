@@ -5,6 +5,7 @@
   <meta name="color-scheme" content="dark light">
   <style>html, body { background: #15100e; } @media (prefers-color-scheme: light) { html, body { background: #eceef1; } }</style>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com https://www.google.com https://apis.google.com https://accounts.google.com; style-src 'self' 'unsafe-inline' https://accounts.google.com; img-src 'self' data: blob: https://*.googleusercontent.com https://www.gstatic.com; font-src 'self'; connect-src 'self' https://*.googleapis.com https://www.google.com https://accounts.google.com https://api.gumroad.com https://ntfy.sh https://www.gstatic.com; frame-src https://www.youtube-nocookie.com https://www.google.com https://recaptcha.google.com https://accounts.google.com https://trener-31965.firebaseapp.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Lift Tara – tvoj tréner v mobile</title>
   <meta name="description" content="Tréningový program na mieru, ukážky cvikov, živý tréning a progres.">
   <meta name="theme-color" content="#15100e" media="(prefers-color-scheme: dark)">
@@ -59,7 +60,8 @@
     @media (prefers-reduced-motion: reduce) { #splash .line::before, #splash .line::after { animation: none; } }
   </style>
   <!-- Štýly aplikácie neblokujú vykreslenie – úvodná obrazovka (inline) sa ukáže okamžite -->
-  <link rel="stylesheet" href="css/styles.css" media="print" onload="this.media='all';document.documentElement.classList.add('css-ready');window.dispatchEvent(new Event('cssready'))">
+  <link rel="stylesheet" href="css/styles.css" media="print" id="app-css">
+  <script src="js/css-ready.js"></script>
   <noscript><link rel="stylesheet" href="css/styles.css"></noscript>
 </head>
 <body>
@@ -104,22 +106,10 @@
   <!-- ukážková verzia (?demo): vlastné dáta v zariadení, bez cloudu a Google – na vyskúšanie bez rizika -->
   <script src="js/i18n-en.js"></script>
   <script src="js/i18n.js"></script>
-  <script>window.DEMO = new URLSearchParams(location.search).has('demo'); if (window.DEMO) window.cloudError = 'demo';</script>
+  <script src="js/demo.js"></script>
   <script src="js/exercise-icons.js" defer></script>
   <!-- cloud (klientska zóna) – samostatný modul, pri výpadku siete appka beží ďalej -->
-  <script type="module">
-    // cloud (Firebase z internetu) sa načíta až po vykreslení obsahu, aby nebrzdil štart;
-    // ak sa nenačíta, appka ukáže dôvod v Nastaveniach
-    // Safari pri slabom signáli (napr. hneď po prebudení appky) niekedy modul nestiahne – skúsi sa ešte 2× s pauzou
-    let cloudTry = 0;
-    const loadCloud = () => import(`./js/cloud.js${cloudTry ? `?pokus=${cloudTry}` : ''}`).catch((e) => {
-      cloudTry++;
-      if (cloudTry < 3) { setTimeout(loadCloud, cloudTry * 2500); return; }
-      window.cloudError = (e && (e.message || String(e))) || 'neznáma chyba';
-      window.dispatchEvent(new Event('cloud-ready'));
-    });
-    if (window.DEMO) { /* v ukážke sa cloud nenačíta */ } else if (document.readyState === 'complete') loadCloud(); else window.addEventListener('load', loadCloud, { once: true });
-  </script>
+  <script type="module" src="js/boot.js"></script>
   <script src="js/app.js" defer></script>
   <!-- živý tréning (časovač, série naživo) -->
   <script src="js/live.js" defer></script>
