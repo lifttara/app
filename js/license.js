@@ -34,16 +34,6 @@ const LIC_API = 'https://api.gumroad.com/v2/licenses/verify';
 const LIC_RECHECK = 12 * 3600e3;
 const payOn = () => (!!LT_PAY.checkout || tiersOn()) && !window.DEMO;
 
-// Kto mal v appke dáta ešte pred spustením predplatného, má ju natrvalo zadarmo
-(function licenseMigrate() {
-  const K = 'lt-license-mig';
-  try {
-    if (window.DEMO || localStorage.getItem(K)) return;
-    if (db.clients.some((c) => c.id !== 'me') && !db.settings.license) { db.settings.license = { plan: 'owner', since: today() }; save(); }
-    localStorage.setItem(K, '1');
-  } catch (e) { /* bez úložiska nič */ }
-})();
-
 // Majiteľ appky: tajný odkaz ?majitel=<kód> odomkne appku natrvalo (uloží sa do účtu a synchronizuje).
 // V kóde je len odtlačok (SHA-256) kódu, samotný kód tu nie je.
 const LT_OWNER_HASH = 'e4528bbae69e36ffdf757d2e51633d5bc22942ed8fb51812f10e30c598006503';
