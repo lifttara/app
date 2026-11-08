@@ -5,6 +5,7 @@
    ========================================================= */
 import { initializeApp, deleteApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import { getAuth, initializeAuth, inMemoryPersistence, signInAnonymously, onAuthStateChanged, setPersistence, indexedDBLocalPersistence, browserSessionPersistence, GoogleAuthProvider, EmailAuthProvider, linkWithPopup, signInWithPopup, signInWithCredential, linkWithCredential, updatePassword, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js';
 import { getFirestore, doc, setDoc, deleteDoc, updateDoc, collection, getDocs, query, where, orderBy, limit, addDoc, serverTimestamp, onSnapshot, writeBatch } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const firebaseConfig = {
@@ -17,6 +18,11 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+// App Check: databáza prijme len požiadavky z tejto appky (reCAPTCHA Enterprise, neviditeľné overenie)
+const APP_CHECK_SITE_KEY = '6LfNnBYuAAAAAE0J_-dpGest-oZ4nEotaNzsMp_N';
+try {
+  initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider(APP_CHECK_SITE_KEY), isTokenAutoRefreshEnabled: true });
+} catch (e) { console.warn('App Check sa nespustil', e); }
 const auth = getAuth(app);
 const fs = getFirestore(app);
 // „Zostať prihlásený“ (predvolene áno): inak sa prihlásenie zabudne po zavretí appky / prehliadača
