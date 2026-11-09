@@ -1358,7 +1358,12 @@ window.addEventListener('hashchange', () => {
   const hash = location.hash || '#/';
   const isDetail = (h) => /^#\/(client|plan)\//.test(h);
   const push = isDetail(hash) && !isDetail(prevHash);
-  const dir = settingsDir(prevHash, hash);
+  // záložky v menu: posun doprava/doľava podľa poradia (Dnes → Program → Cviky → Progres)
+  const TABS = ['home', 'program', 'exercises', 'progress'];
+  const tabOf = (h) => (/^#\/(exercise|plan|client)\//.test(h) || h.startsWith('#/settings') || h === '#/start' ? -1
+    : TABS.indexOf(typeof coachSection === 'function' ? coachSection(h) : ''));
+  const ta = tabOf(prevHash), tb = tabOf(hash);
+  const dir = settingsDir(prevHash, hash) || (ta >= 0 && tb >= 0 && ta !== tb ? (tb > ta ? 'tab-r' : 'tab-l') : '');
   prevHash = hash;
   // návrat potiahnutím prstom: stará obrazovka už odišla doprava, Nastavenia len prídu zľava
   if (swipedBack) {

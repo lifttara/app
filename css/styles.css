@@ -2701,14 +2701,18 @@ body::before { display: none !important; }
 .today-plan::after { animation-delay: 4.5s; }
 @keyframes lt-shine { 0%, 70% { transform: rotate(18deg) translateX(-260%); } 88%, 100% { transform: rotate(18deg) translateX(520%); } }
 
-/* pružinové vstupné animácie obsahu */
+/* prepínanie záložiek – plynulý posun do strany a prelínanie (stará obrazovka ostáva viditeľná,
+   kým nová prichádza – žiadne preblikanie). Pri bežnom prekreslení (napr. +/− pri návykoch) sa nič neanimuje. */
+html[data-vt] main, .vt-ghost { background: transparent !important; }
+html[data-vt="tab-r"] main { animation: lt-tab-in-r .5s var(--spring2) both; }
+html[data-vt="tab-l"] main { animation: lt-tab-in-l .5s var(--spring2) both; }
+html[data-vt="tab-r"] .vt-ghost { animation: lt-tab-out-l .22s cubic-bezier(.4, 0, 1, 1) both; }
+html[data-vt="tab-l"] .vt-ghost { animation: lt-tab-out-r .22s cubic-bezier(.4, 0, 1, 1) both; }
+@keyframes lt-tab-in-r { from { transform: translateX(18%) scale(.98); opacity: 0; } }
+@keyframes lt-tab-in-l { from { transform: translateX(-18%) scale(.98); opacity: 0; } }
+@keyframes lt-tab-out-l { to { transform: translateX(-12%) scale(.97); opacity: 0; filter: blur(6px); } }
+@keyframes lt-tab-out-r { to { transform: translateX(12%) scale(.97); opacity: 0; filter: blur(6px); } }
 @keyframes lt-rise { from { opacity: 0; transform: translateY(24px) scale(.96); } to { opacity: 1; transform: none; } }
-main > *, .today-main > *, .today-side > *, .prog-col > *, .ex-col > *, .set-col > * { animation: lt-rise .8s var(--spring2) both; }
-main > *:nth-child(2), .today-main > *:nth-child(2), .today-side > *:nth-child(2) { animation-delay: .07s; }
-main > *:nth-child(3), .today-main > *:nth-child(3), .today-side > *:nth-child(3) { animation-delay: .14s; }
-main > *:nth-child(4), .today-side > *:nth-child(4) { animation-delay: .21s; }
-main > *:nth-child(n+5), .today-side > *:nth-child(n+5) { animation-delay: .28s; }
-@media (prefers-reduced-motion: reduce) { main > *, .today-main > *, .today-side > *, .prog-col > *, .ex-col > *, .set-col > * { animation: none; } }
 
 /* hlavné tlačidlo na Dnes – „potiahni a začni“ s lesklou červenou guľou */
 .hero .btn.primary.cta {
