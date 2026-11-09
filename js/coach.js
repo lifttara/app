@@ -168,8 +168,14 @@ function viewToday() {
   ${habitsTodayCard()}
 
   <section class="card week-card">
+    <div class="week-ring-row">
+      <div class="week-ring" style="--p:${Math.min(1, wd.length / target)}"><svg viewBox="0 0 86 86" aria-hidden="true"><defs><linearGradient id="wr-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6d79a"/><stop offset="1" stop-color="#d8303f"/></linearGradient></defs><circle class="bg" cx="43" cy="43" r="36"/><circle class="fg" cx="43" cy="43" r="36" pathLength="100"/></svg><b>${wd.length}/${target}</b></div>
+      <div class="week-ring-info">
     <div class="card-head"><h2>Tento týždeň</h2><span class="badge ${wd.length >= target ? 'done' : 'planned'}">${wd.length} z ${target}</span></div>
+    <p class="week-ring-sub">${wd.length >= target ? 'Cieľ splnený. Výborne!' : `Ešte ${target - wd.length} ${pl(target - wd.length, 'tréning', 'tréningy', 'tréningov')} do cieľa`}</p>
     <div class="week-dots">${Array.from({ length: 7 }, (_, i) => { const d = addDays(ws, i); const n = wd.filter((s) => s.date === d).length; return `<div class="wd${n ? ' on' : ''}${d === t ? ' today' : ''}"><span>${DAYS_LONG[i].slice(0, 2)}</span><i>${n ? IC.check : ''}</i></div>`; }).join('')}</div>
+      </div>
+    </div>
   </section>
 
   <div class="stats">
@@ -389,7 +395,7 @@ render = function (...args) {
   const r = renderWithoutCoach.apply(this, args);
   const sec = coachSection(h);
   document.querySelectorAll('[data-nav]').forEach((a) => a.classList.toggle('active', a.dataset.nav === sec));
-  if (render.coachSec !== sec) { render.coachSec = sec; if (typeof moveNavInd === 'function') moveNavInd(); }
+  render.coachSec = sec; if (typeof moveNavInd === 'function') moveNavInd(); // vždy – app.js mohol indikátor posunúť inam
   return r;
 };
 
@@ -457,3 +463,23 @@ document.addEventListener('input', (e) => {
 if (window.DEMO && !profile()) coachDemo();
 coachEnsure();
 render();
+
+/* ---------- „Potiahni a začni“ – guľa na hlavnom tlačidle sa dá potiahnuť (ťuknutie funguje tiež) ---------- */
+document.addEventListener('pointerdown', (e) => {
+  const b = e.target.closest?.('.hero .btn.cta');
+  const k = b?.querySelector('span[aria-hidden]');
+  if (!k) return;
+  const x0 = e.clientX, max = b.clientWidth - k.offsetWidth - 12;
+  let dx = 0;
+  b.classList.add('dragging');
+  const move = (ev) => { dx = Math.max(0, Math.min(max, ev.clientX - x0)); k.style.transform = `translateX(${dx}px)`; };
+  const up = (ev) => {
+    removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
+    b.classList.remove('dragging');
+    const done = dx > max * 0.6;
+    k.style.transform = done ? `translateX(${max}px)` : '';
+    // pustené mimo tlačidla – klik nepríde sám, spusti ho
+    if (done && ev.type === 'pointerup' && !b.contains(ev.target)) b.click();
+  };
+  addEventListener('pointermove', move); addEventListener('pointerup', up); addEventListener('pointercancel', up);
+});

@@ -269,6 +269,7 @@ function liveRestHtml() {
   }
   return `<div class="live-rest${paused ? ' paused' : ''}" role="timer" aria-live="polite" data-drag="rest">
     <button type="button" class="rest-grab" data-l="rest-collapse" aria-label="Zbaliť odpočet"><span></span></button>
+    ${typeof gretaPose === 'function' ? `<div class="rest-greta"><img src="${gretaPose('stopky')}" alt="" loading="lazy"><span>${tr(paused ? 'Pauza stojí. Keď budeš pripravený, pokračuj.' : 'Oddychuj, ale nie dlho!')}</span></div>` : ''}
     <div class="rest-main">
       <button type="button" class="ring" data-l="rest-toggle" aria-label="${paused ? 'Pustiť odpočet' : 'Zastaviť odpočet'}">${ring(true)}
         <span class="ring-txt"><small id="rest-state">${paused ? 'Zastavené' : 'Pauza'}</small><b id="rest-left">${fmtClock(left)}</b><span class="ring-hint">${paused ? 'pokračovať' : 'zastaviť'}</span></span></button>
@@ -611,7 +612,7 @@ function liveSummaryHtml(s, c) {
   return `
   <header class="live-head"><button type="button" class="icon-btn" data-l="back" aria-label="Späť k tréningu"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><div class="live-title"><b>Tréning hotový</b><small>${esc(c ? c.name : '')} · ${fmtDay(s.date)}</small></div><span></span></header>
   <main class="live-body live-summary">
-    <div class="sum-hero"><span class="sum-emoji" aria-hidden="true">${prs.length ? '<svg class="ei" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3"/></svg>' : '<svg class="ei" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>'}</span><h2>${prs.length ? (prs.length > 1 ? `${prs.length} nové rekordy!` : 'Nový rekord!') : 'Výborná práca!'}</h2></div>
+    <div class="sum-hero">${typeof gretaPose === 'function' ? `<img class="sum-greta" src="${gretaPose(prs.length ? 'medaila' : 'palec')}" alt="Babka Greta" loading="lazy">` : ''}<span class="sum-emoji" aria-hidden="true">${prs.length ? '<svg class="ei" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3"/></svg>' : '<svg class="ei" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>'}</span><h2>${prs.length ? (prs.length > 1 ? `${prs.length} nové rekordy!` : 'Nový rekord!') : 'Výborná práca!'}</h2></div>
     <div class="sum-stats">
       <div><b>${fmtClock(dur)}</b><span>čas</span></div>
       <div><b>${sets}</b><span>sérií</span></div>
