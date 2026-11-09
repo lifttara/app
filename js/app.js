@@ -1001,8 +1001,10 @@ function viewSettings() {
   const days = WEEK.filter(([k]) => workHours()[k]?.length).length;
   return `
   <div class="page-head"><h1>Nastavenia</h1></div>
+  <div class="set-grid"><div class="set-col">
   ${accountCard()}
   ${typeof licenseGroup === 'function' ? licenseGroup() : ''}
+  </div><div class="set-col">
   ${typeof profile === 'function' && profile() ? setGroup('Tréning', [
     setRow({ icon: 'spark', title: 'Môj program', sub: 'Zmeniť cieľ, dni alebo miesto', href: '#/start' }),
     ...(typeof hasTier !== 'function' || hasTier('medium') ? [setRow({ icon: 'flask', title: 'Ciele návykov', sub: 'Kroky, voda a spánok', action: 'coach-habit-goals' })] : []),
@@ -1019,7 +1021,8 @@ function viewSettings() {
     setRow({ icon: 'mail', title: 'Podpora', sub: SUPPORT_MAIL, href: `mailto:${SUPPORT_MAIL}?subject=Lift%20Tara` }),
     setRow({ icon: 'info', title: 'Verzia', val: '<b id="app-version">–</b>', chev: false, action: '' })
   ], `${nTr(db.sessions.filter((s) => s.status === 'done').length)} · ${cnt(db.plans.length, 'plán', 'plány', 'plánov')} · ${nEx(db.exercises.length)}`)}
-  ${setGroup('', [setRow({ icon: 'trash', title: 'Vymazať všetky dáta', action: 'wipe', danger: true, chev: false })])}`;
+  ${setGroup('', [setRow({ icon: 'trash', title: 'Vymazať všetky dáta', action: 'wipe', danger: true, chev: false })])}
+  </div></div>`;
 }
 
 // Podstránky nastavení
