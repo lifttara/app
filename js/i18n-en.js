@@ -1796,7 +1796,12 @@ window.I18N_EN = {
 "Váha a obvody sú údaje o zdraví. Zadávaš ich dobrovoľne – uložením súhlasíš s ich spracovaním na sledovanie progresu. Kedykoľvek ich môžeš vymazať.": "Weight and body measurements are health data. You enter them voluntarily – by saving you agree to them being processed to track your progress. You can delete them at any time.",
 "Obvod bokov (cm)": "Hips (cm)",
 "Podpora": "Support",
-"napr. Tomáš": "e.g. Tom"
+"napr. Tomáš": "e.g. Tom",
+"Týždeň splnený! Som na teba hrdá.": "Week done! I'm proud of you.",
+"Toto je tvoj plán. Cvič po poradí a nič nevynechaj.": "This is your plan. Train in order and don't skip anything.",
+"Oddychuj, ale nie dlho!": "Rest, but not for long!",
+"Pauza stojí. Keď budeš pripravený, pokračuj.": "Rest is paused. Carry on when you're ready.",
+"Cieľ splnený. Výborne!": "Goal reached. Well done!"
 },
 "rules": [
 [
@@ -2570,6 +2575,14 @@ window.I18N_EN = {
 [
 "pauza {0} min",
 "rest {0} min"
+],
+[
+"{0} dní bez tréningu? Tak toto nie. Dnes ideš cvičiť.",
+"{0} days without training? Not on my watch. You're training today."
+],
+[
+"Ešte {0} {1} do cieľa",
+"{0} {1} to go"
 ]
 ]
 };

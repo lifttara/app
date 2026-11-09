@@ -2645,3 +2645,126 @@ input, select, textarea, .search { border-radius: 16px; }
 .ex-thumb .eq, .ex-thumb .eq path { stroke: #1d1714 !important; }
 .ex-thumb .eq .pl { fill: #c62a3c !important; stroke: none !important; }
 .ex-hero { background: radial-gradient(circle at 35% 28%, #ffffff 0%, #fbf5ec 45%, #eadcc5 100%) !important; border: 0 !important; box-shadow: 0 18px 28px -16px rgba(110, 70, 35, .55), inset 0 -5px 10px rgba(160, 120, 80, .14), inset 0 3px 2px rgba(255, 255, 255, .9) !important; }
+
+/* =========================================================
+   Redizajn 5 – tekuté sklo: živé farebné pozadie, lesklé sklenené karty,
+   tlačidlo „potiahni a začni“, červená kvapka v menu, krúžok týždňa,
+   Greta v rôznych úlohách, pružinové animácie
+   ========================================================= */
+:root {
+  --spring2: cubic-bezier(.3, 1.5, .5, 1);
+  --lq-card: linear-gradient(135deg, rgba(255, 255, 255, .13), rgba(255, 255, 255, .04));
+  --lq-hi: inset 0 1px 0 rgba(255, 255, 255, .38), inset 0 -1px 0 rgba(255, 255, 255, .06), inset 1px 0 0 rgba(255, 255, 255, .1);
+  --lq-drop: 0 22px 40px -22px rgba(0, 0, 0, .85);
+  --lq-line: rgba(255, 255, 255, .13);
+  --pill-red: radial-gradient(circle at 35% 30%, #ff6b77, #c62a3c 60%, #8a1726);
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --lq-card: linear-gradient(135deg, rgba(255, 255, 255, .78), rgba(255, 250, 242, .5));
+    --lq-hi: inset 0 1px 0 rgba(255, 255, 255, .95), inset 0 -1px 0 rgba(160, 110, 70, .08);
+    --lq-drop: 0 18px 34px -20px rgba(110, 60, 30, .45);
+    --lq-line: rgba(255, 255, 255, .9);
+  }
+}
+/* živé pozadie – pomaly plávajúce farebné škvrny */
+/* farba na <html>, <body> priehľadné – inak by telo prekrylo škvrny za ním */
+html { background: #140d0b !important; }
+html body { background: transparent !important; }
+@media (prefers-color-scheme: light) { html { background: #f6ece0 !important; } }
+body::before { display: none !important; }
+.lt-bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.lt-bg i { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .7; animation: lt-float 16s ease-in-out infinite alternate; will-change: transform; }
+.lt-bg i:nth-child(1) { width: 70vmax; height: 70vmax; left: -25vmax; top: -25vmax; background: #c62a3c; }
+.lt-bg i:nth-child(2) { width: 55vmax; height: 55vmax; right: -25vmax; top: 30vh; background: #e9b75c; opacity: .45; animation-delay: -6s; }
+.lt-bg i:nth-child(3) { width: 60vmax; height: 60vmax; left: -15vmax; bottom: -30vmax; background: #7a1622; animation-delay: -11s; }
+@media (prefers-color-scheme: light) { .lt-bg i { opacity: .32; } .lt-bg i:nth-child(2) { opacity: .4; } .lt-bg i:nth-child(3) { background: #e88a7a; } }
+@keyframes lt-float { to { transform: translate(6vmax, 8vmax) scale(1.15); } }
+@media (prefers-reduced-motion: reduce) { .lt-bg i { animation: none; } }
+
+/* tekuté sklo – karty, lišty, panely */
+.card, .set-list, .set-profile, .stat, .greta .greta-bubble, .nav, .topbar .lang-pill {
+  background: var(--lq-card) !important;
+  backdrop-filter: blur(26px) saturate(1.6) !important; -webkit-backdrop-filter: blur(26px) saturate(1.6) !important;
+  border: 1px solid var(--lq-line) !important;
+  box-shadow: var(--lq-hi), var(--lq-drop) !important;
+}
+.card, .set-list, .set-profile { border-radius: 28px !important; }
+@media (max-width: 899px) { .topbar { background: transparent !important; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); } }
+/* lesklý odlesk, ktorý občas prebehne po hlavných kartách */
+.week-card, .today-plan, .live-summary .sum-stats { position: relative; overflow: hidden; }
+.week-card::after, .today-plan::after {
+  content: ""; position: absolute; top: -60%; left: -30%; width: 45%; height: 220%; pointer-events: none;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .16), transparent);
+  transform: rotate(18deg) translateX(-260%); animation: lt-shine 7s ease-in-out infinite 2s;
+}
+.today-plan::after { animation-delay: 4.5s; }
+@keyframes lt-shine { 0%, 70% { transform: rotate(18deg) translateX(-260%); } 88%, 100% { transform: rotate(18deg) translateX(520%); } }
+
+/* pružinové vstupné animácie obsahu */
+@keyframes lt-rise { from { opacity: 0; transform: translateY(24px) scale(.96); } to { opacity: 1; transform: none; } }
+main > *, .today-main > *, .today-side > *, .prog-col > *, .ex-col > *, .set-col > * { animation: lt-rise .8s var(--spring2) both; }
+main > *:nth-child(2), .today-main > *:nth-child(2), .today-side > *:nth-child(2) { animation-delay: .07s; }
+main > *:nth-child(3), .today-main > *:nth-child(3), .today-side > *:nth-child(3) { animation-delay: .14s; }
+main > *:nth-child(4), .today-side > *:nth-child(4) { animation-delay: .21s; }
+main > *:nth-child(n+5), .today-side > *:nth-child(n+5) { animation-delay: .28s; }
+@media (prefers-reduced-motion: reduce) { main > *, .today-main > *, .today-side > *, .prog-col > *, .ex-col > *, .set-col > * { animation: none; } }
+
+/* hlavné tlačidlo na Dnes – „potiahni a začni“ s lesklou červenou guľou */
+.hero .btn.primary.cta {
+  position: relative; width: 100%; max-width: 420px; height: 60px; justify-content: center !important; padding: 6px !important;
+  background: rgba(255, 255, 255, .16) !important; color: #fff8ee !important; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -1px 0 rgba(255, 255, 255, .1) !important; overflow: visible; touch-action: pan-y;
+}
+.hero .btn.primary.cta::after { display: none; }
+.hero .btn.primary.cta > span[aria-hidden] {
+  position: absolute; left: 6px; top: 6px; width: 48px !important; height: 48px !important; background: var(--pill-red) !important;
+  box-shadow: 0 6px 18px rgba(216, 48, 63, .7), inset 0 1px 1px rgba(255, 255, 255, .6); z-index: 2;
+  transition: transform .5s var(--spring2);
+}
+.hero .btn.primary.cta.dragging > span[aria-hidden] { transition: none; }
+.hero .btn.primary.cta:not(.dragging) > span[aria-hidden] { animation: lt-nudge 3.6s ease-in-out infinite 2s; }
+@keyframes lt-nudge { 0%, 80%, 100% { transform: translateX(0); } 86% { transform: translateX(14px); } 92% { transform: translateX(0); } 96% { transform: translateX(6px); } }
+.hero .btn.primary.cta { font-weight: 600; letter-spacing: .01em !important; }
+.hero.hero-photo { border-radius: 30px !important; }
+
+/* krúžok týždňa */
+.week-ring-row { display: flex; align-items: center; gap: 16px; }
+.week-ring-info { flex: 1; min-width: 0; }
+.week-ring-info .card-head { margin-bottom: 2px; }
+.week-ring-sub { margin: 0 0 10px; color: var(--muted); font-size: .82rem; }
+.week-ring { position: relative; width: 86px; height: 86px; flex: none; }
+.week-ring svg { width: 86px; height: 86px; transform: rotate(-90deg); }
+.week-ring circle { fill: none; stroke-width: 9; }
+.week-ring .bg { stroke: rgba(255, 255, 255, .12); }
+@media (prefers-color-scheme: light) { .week-ring .bg { stroke: rgba(120, 70, 40, .12); } }
+.week-ring .fg { stroke: url(#wr-g); stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: calc(100 - var(--p) * 100); animation: lt-ring 1.6s cubic-bezier(.2, .8, .2, 1) both .3s; filter: drop-shadow(0 0 6px rgba(216, 48, 63, .7)); }
+@keyframes lt-ring { from { stroke-dashoffset: 100; } }
+.week-ring b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 1.3rem; font-weight: 700; }
+.week-ring-info .week-dots { gap: 5px; }
+.wd { background: transparent !important; border: 0 !important; padding: 0 !important; box-shadow: none !important; color: var(--muted) !important; font-size: .66rem; gap: 4px !important; }
+.wd i { width: 24px !important; height: 24px !important; border-radius: 50%; background: rgba(255, 255, 255, .1) !important; }
+@media (prefers-color-scheme: light) { .wd i { background: rgba(120, 70, 40, .1) !important; } }
+.wd.on i { background: linear-gradient(135deg, #f0505e, #a81f30) !important; color: #fff8ee; box-shadow: 0 0 12px rgba(216, 48, 63, .6) !important; animation: lt-pop .5s var(--spring2) both .9s; }
+.wd.on i .i { width: 14px; height: 14px; }
+.wd.today i { box-shadow: 0 0 0 2px #e9b75c !important; animation: lt-pulse 1.8s ease-in-out infinite; }
+@keyframes lt-pop { from { transform: scale(0); } }
+@keyframes lt-pulse { 50% { box-shadow: 0 0 0 2px #e9b75c, 0 0 14px 2px rgba(233, 183, 92, .6) !important; } }
+
+/* menu – lesklá červená kvapka pod aktívnou položkou */
+.nav-ind { background: var(--pill-red) !important; box-shadow: 0 8px 20px rgba(216, 48, 63, .6), inset 0 1px 1px rgba(255, 255, 255, .6); transition: transform .6s var(--spring2), width .6s var(--spring2), height .6s var(--spring2), opacity .2s !important; }
+.nav a.active, .nav.has-ind a.active { color: #fff8ee !important; }
+@media (max-width: 899px) { .nav a { background: transparent !important; } .nav a:not(.active) { color: var(--muted); } }
+
+/* Greta v rôznych úlohách */
+.greta.has-pose { align-items: flex-end; gap: 4px; }
+.greta.has-pose .greta-pose { width: 96px; height: auto; flex: none; border: 0 !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; transform: none !important; filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .35)) !important; animation: lt-bob 3.4s ease-in-out infinite; margin-bottom: -4px; }
+.greta.has-pose .greta-bubble { margin-bottom: 18px; animation: lt-bubble .6s var(--spring2) both .6s; transform-origin: left bottom; }
+@keyframes lt-bob { 50% { transform: translateY(-4px) rotate(-1.2deg); } }
+@keyframes lt-bubble { from { opacity: 0; transform: scale(.6); } }
+.rest-greta { display: flex; align-items: flex-end; justify-content: center; gap: 6px; margin: -6px 0 6px; }
+.rest-greta img { width: 92px; height: auto; filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .4)); animation: lt-bob 3s ease-in-out infinite; }
+.rest-greta span { margin-bottom: 22px; padding: 8px 12px; border-radius: 16px 16px 16px 4px; background: rgba(255, 248, 238, .94); color: #1d1714; font-size: .82rem; font-weight: 600; box-shadow: 0 8px 18px -10px rgba(0, 0, 0, .6); animation: lt-bubble .6s var(--spring2) both .3s; }
+.sum-hero .sum-greta { display: block; width: 150px; height: auto; margin: 0 auto -8px; filter: drop-shadow(0 14px 18px rgba(0, 0, 0, .4)); animation: lt-rise .9s var(--spring2) both, lt-bob 3.4s ease-in-out infinite 1s; }
+.sum-hero:has(.sum-greta) .sum-emoji { display: none; }
+@media (prefers-reduced-motion: reduce) { .greta-pose, .rest-greta img, .sum-greta, .greta-bubble, .rest-greta span { animation: none !important; } }
