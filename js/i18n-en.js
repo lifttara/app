@@ -1801,7 +1801,9 @@ window.I18N_EN = {
 "Toto je tvoj plán. Cvič po poradí a nič nevynechaj.": "This is your plan. Train in order and don't skip anything.",
 "Oddychuj, ale nie dlho!": "Rest, but not for long!",
 "Pauza stojí. Keď budeš pripravený, pokračuj.": "Rest is paused. Carry on when you're ready.",
-"Cieľ splnený. Výborne!": "Goal reached. Well done!"
+"Cieľ splnený. Výborne!": "Goal reached. Well done!",
+"Ďalej ›": "Next ›",
+"‹ Späť": "‹ Back"
 },
 "rules": [
 [

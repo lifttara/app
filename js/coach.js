@@ -118,14 +118,19 @@ function viewStart() {
       <p class="muted">Odpovedz na pár otázok a Lift Tara ti zostaví tréningový program na mieru. Pri každom cviku uvidíš, ako ho robiť správne.</p>
     </div>` : `<a href="#/program" class="back-link">‹ Program</a><div class="page-head"><h1>Nový program</h1></div>
       <p class="muted">Zmeň odpovede a Lift Tara ti zostaví nový program. História tréningov a rekordy ostanú.</p>`}
-    <form id="coach-form" class="card start-form">
-      <label class="q"><span>Ako ťa máme oslovovať?</span><input id="f_coach_name" name="name" autocomplete="given-name" placeholder="Tvoje meno (nepovinné)" value="${esc(db.settings.trainerName || '')}"></label>
-      <fieldset class="q"><legend>Čo je tvoj hlavný cieľ?</legend>${choice('goal', GOALS, p.goal)}</fieldset>
-      <fieldset class="q"><legend>Aké máš skúsenosti s cvičením?</legend>${choice('level', LEVELS, p.level)}</fieldset>
-      <fieldset class="q"><legend>Koľko dní v týždni chceš cvičiť?</legend>${choice('days', DAYS_OPT, p.days)}</fieldset>
-      <fieldset class="q"><legend>Kde budeš cvičiť?</legend>${choice('place', PLACES, p.place)}</fieldset>
-      <fieldset class="q"><legend>Máš problémy s niektorou časťou tela?</legend>${choice('limits', LIMITS, p.limits, true)}<small class="hint">Nepovinné. Cviky, ktoré by ju zaťažovali, vynecháme. Je to údaj o zdraví – označením súhlasíš s jeho spracovaním na prispôsobenie programu. Súhlas odvoláš zrušením označenia.</small></fieldset>
-      <button class="btn primary block" type="submit">${first ? 'Vytvoriť môj program' : 'Vytvoriť nový program'}</button>
+    <form id="coach-form" class="card start-form wizard" novalidate>
+      <div class="wz-top"><span class="wz-count"><b id="wz-n">1</b> / ${6}</span><div class="wz-bar"><i id="wz-fill"></i></div></div>
+      <label class="q q-step" data-step="0"><span>Ako ťa máme oslovovať?</span><input id="f_coach_name" name="name" autocomplete="given-name" placeholder="Tvoje meno (nepovinné)" value="${esc(db.settings.trainerName || '')}"></label>
+      <fieldset class="q q-step" data-step="1"><legend>Čo je tvoj hlavný cieľ?</legend>${choice('goal', GOALS, p.goal)}</fieldset>
+      <fieldset class="q q-step" data-step="2"><legend>Aké máš skúsenosti s cvičením?</legend>${choice('level', LEVELS, p.level)}</fieldset>
+      <fieldset class="q q-step" data-step="3"><legend>Koľko dní v týždni chceš cvičiť?</legend>${choice('days', DAYS_OPT, p.days)}</fieldset>
+      <fieldset class="q q-step" data-step="4"><legend>Kde budeš cvičiť?</legend>${choice('place', PLACES, p.place)}</fieldset>
+      <fieldset class="q q-step" data-step="5"><legend>Máš problémy s niektorou časťou tela?</legend>${choice('limits', LIMITS, p.limits, true)}<small class="hint">Nepovinné. Cviky, ktoré by ju zaťažovali, vynecháme. Je to údaj o zdraví – označením súhlasíš s jeho spracovaním na prispôsobenie programu. Súhlas odvoláš zrušením označenia.</small></fieldset>
+      <div class="wz-nav">
+        <button class="btn wz-back" type="button" data-wz="-1" hidden>‹ Späť</button>
+        <button class="btn primary wz-next" type="button" data-wz="1">Ďalej ›</button>
+      <button class="btn primary block wz-done" hidden type="submit">${first ? 'Vytvoriť môj program' : 'Vytvoriť nový program'}</button>
+      </div>
       ${first ? '<p class="hint" style="text-align:center;margin-top:12px">Odpovede môžeš kedykoľvek zmeniť v sekcii Program.</p>' : ''}
     </form>
   </section>`;
@@ -483,3 +488,42 @@ document.addEventListener('pointerdown', (e) => {
   };
   addEventListener('pointermove', move); addEventListener('pointerup', up); addEventListener('pointercancel', up);
 });
+
+/* ---------- Dotazník po krokoch – jedna otázka naraz, ukazovateľ postupu ---------- */
+function wizardShow(f, i) {
+  const steps = [...f.querySelectorAll('.q-step')];
+  i = Math.max(0, Math.min(steps.length - 1, i));
+  const prev = Number(f.dataset.step || 0);
+  steps.forEach((st, k) => { st.classList.toggle('on', k === i); st.classList.toggle('from-left', k === i && i < prev); });
+  f.dataset.step = i;
+  f.querySelector('#wz-n').textContent = i + 1;
+  f.querySelector('#wz-fill').style.width = `${((i + 1) / steps.length) * 100}%`;
+  f.querySelector('.wz-back').hidden = i === 0;
+  const last = i === steps.length - 1;
+  f.querySelector('.wz-next').hidden = last;
+  f.querySelector('.wz-done').hidden = !last;
+}
+document.addEventListener('click', (e) => {
+  const b = e.target.closest?.('#coach-form [data-wz]');
+  if (!b) return;
+  const f = b.form;
+  wizardShow(f, Number(f.dataset.step || 0) + Number(b.dataset.wz));
+});
+// pri jednej voľbe sa po výbere samo prejde na ďalšiu otázku
+// (aj ťuknutie na už vybranú voľbu – vtedy „change“ nepríde)
+document.addEventListener('click', (e) => {
+  const inp = e.target.closest?.('#coach-form.wizard .pick')?.querySelector('input[type=radio]');
+  if (inp?.checked) inp.dispatchEvent(new Event('change', { bubbles: true }));
+}, true);
+document.addEventListener('change', (e) => {
+  const f = e.target.closest?.('#coach-form.wizard');
+  if (!f || e.target.type !== 'radio') return;
+  const i = Number(f.dataset.step || 0);
+  clearTimeout(f.wzT);
+  f.wzT = setTimeout(() => { if (Number(f.dataset.step || 0) === i) wizardShow(f, i + 1); }, 320);
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' || !e.target.closest?.('#coach-form .q-step[data-step="0"]')) return;
+  e.preventDefault(); wizardShow(e.target.form, 1);
+});
+new MutationObserver(() => { const f = document.querySelector('#coach-form.wizard:not([data-step])'); if (f) wizardShow(f, 0); }).observe(document.body, { childList: true, subtree: true });
