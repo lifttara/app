@@ -2768,3 +2768,117 @@ main > *:nth-child(n+5), .today-side > *:nth-child(n+5) { animation-delay: .28s;
 .sum-hero .sum-greta { display: block; width: 150px; height: auto; margin: 0 auto -8px; filter: drop-shadow(0 14px 18px rgba(0, 0, 0, .4)); animation: lt-rise .9s var(--spring2) both, lt-bob 3.4s ease-in-out infinite 1s; }
 .sum-hero:has(.sum-greta) .sum-emoji { display: none; }
 @media (prefers-reduced-motion: reduce) { .greta-pose, .rest-greta img, .sum-greta, .greta-bubble, .rest-greta span { animation: none !important; } }
+
+/* =========================================================
+   Redizajn 6 – tekuté sklo v celej appke: dialógy, polia, tlačidlá,
+   čipy, živý tréning, súhrn, platobná obrazovka, štítky, hlášky
+   ========================================================= */
+:root {
+  --lq-field: rgba(255, 255, 255, .08);
+  --lq-field-line: rgba(255, 255, 255, .14);
+  --lq-sheet: rgba(30, 20, 17, .72);
+  --lq-btn: rgba(255, 255, 255, .1);
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --lq-field: rgba(255, 255, 255, .62);
+    --lq-field-line: rgba(255, 255, 255, .95);
+    --lq-sheet: rgba(255, 248, 240, .78);
+    --lq-btn: rgba(255, 255, 255, .6);
+  }
+}
+/* písmo – moderné všade (Alfa Slab už iba v logu na webe) */
+html body .brand, .pw-tier-head b, .paywall h1, .live-ex-head h2 { font-family: var(--font) !important; font-weight: 700 !important; letter-spacing: -.02em !important; }
+
+/* tlačidlá – sklenené pilulky, hlavné lesklé červené */
+.btn:not(.primary):not(.danger):not(.cta), .icon-btn, .lcheck {
+  background: var(--lq-btn) !important; border: 1px solid var(--lq-field-line) !important;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 8px 18px -14px rgba(0, 0, 0, .7) !important; color: var(--text);
+}
+.btn.primary:not(.cta), .lset.cur .lcheck {
+  background: var(--pill-red) !important; color: #fff8ee !important; border: 0 !important;
+  box-shadow: 0 10px 22px -10px rgba(216, 48, 63, .85), inset 0 1px 1px rgba(255, 255, 255, .55) !important;
+}
+.btn.danger { background: rgba(216, 48, 63, .14) !important; color: #ff8a92 !important; border: 1px solid rgba(216, 48, 63, .35) !important; box-shadow: none !important; }
+@media (prefers-color-scheme: light) { .btn.danger { color: #b22234 !important; } }
+.btn, .icon-btn, .chip, .lcheck { transition: transform .35s var(--spring2), background .2s, box-shadow .2s !important; }
+.btn:active, .icon-btn:active, .chip:active, .lcheck:active { transform: scale(.94) !important; }
+.icon-btn { border-radius: 50% !important; }
+
+/* čipy */
+.chip { background: var(--lq-btn) !important; border: 1px solid var(--lq-field-line) !important; color: var(--text) !important; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.chip.active { background: var(--pill-red) !important; color: #fff8ee !important; border-color: transparent !important; box-shadow: 0 8px 18px -10px rgba(216, 48, 63, .9), inset 0 1px 1px rgba(255, 255, 255, .5) !important; }
+.tag { border-radius: 999px !important; background: var(--lq-btn) !important; border: 1px solid var(--lq-field-line) !important; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.tag.focus { background: rgba(216, 48, 63, .18) !important; border-color: rgba(216, 48, 63, .4) !important; }
+
+/* polia formulárov */
+input:not([type=checkbox]):not([type=radio]):not([type=range]), select, textarea, .search, .stepper {
+  background: var(--lq-field) !important; border: 1px solid var(--lq-field-line) !important; border-radius: 16px !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, .18) !important; color: var(--text);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+input:focus, select:focus, textarea:focus, .search:focus { outline: none; border-color: rgba(216, 48, 63, .7) !important; box-shadow: 0 0 0 3px rgba(216, 48, 63, .22), inset 0 2px 6px rgba(0, 0, 0, .15) !important; }
+
+/* dialógy – sklenený panel zospodu */
+dialog { background: var(--lq-sheet) !important; backdrop-filter: blur(30px) saturate(1.5) !important; -webkit-backdrop-filter: blur(30px) saturate(1.5) !important; border: 1px solid var(--lq-line) !important; border-radius: 30px !important; box-shadow: var(--lq-hi), 0 -20px 60px -20px rgba(0, 0, 0, .7) !important; }
+@media (max-width: 600px) { dialog { border-radius: 30px 30px 0 0 !important; } }
+dialog::backdrop { background: rgba(10, 6, 5, .45) !important; backdrop-filter: blur(4px) !important; -webkit-backdrop-filter: blur(4px) !important; }
+dialog[open] { animation: lt-sheet .55s var(--spring2) both; }
+@keyframes lt-sheet { from { transform: translateY(40px); opacity: 0; } }
+.modal-head, .modal-foot { border-color: var(--lq-field-line) !important; }
+
+/* živý tréning – pozadie so škvrnami presvitá cez sklo */
+.live { background: var(--lq-sheet) !important; backdrop-filter: blur(34px) saturate(1.5); -webkit-backdrop-filter: blur(34px) saturate(1.5); }
+.live-tab, .lset:not(.head), .live-rest, .rest-row .chip, .live-meta + *, .live-tip {
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+}
+.live-tab, .lset:not(.head) { background: var(--lq-card) !important; border: 1px solid var(--lq-line) !important; box-shadow: var(--lq-hi) !important; border-radius: 20px !important; }
+.live-tab.active, .live-tab.on, .lset.cur { border-color: rgba(233, 183, 92, .7) !important; box-shadow: var(--lq-hi), 0 0 0 1px rgba(233, 183, 92, .5), 0 10px 24px -14px rgba(233, 183, 92, .6) !important; }
+.lset.done { opacity: .85; }
+.live-rest { background: var(--lq-sheet) !important; border: 1px solid var(--lq-line) !important; box-shadow: var(--lq-hi), 0 -16px 40px -18px rgba(0, 0, 0, .7) !important; border-radius: 30px 30px 0 0 !important; }
+.live-rest .ring .fg, .mini-ring .fg { stroke: #e9b75c !important; filter: drop-shadow(0 0 6px rgba(216, 48, 63, .7)); }
+.live-head, .live-foot { background: transparent !important; border-color: var(--lq-field-line) !important; }
+.live-ex { animation: lt-rise .55s var(--spring2) both !important; }
+
+/* súhrn po tréningu */
+.sum-stats > div, .sum-list li { background: var(--lq-card) !important; border: 1px solid var(--lq-line) !important; box-shadow: var(--lq-hi), var(--lq-drop) !important; border-radius: 20px !important; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.sum-stats > div { animation: lt-rise .7s var(--spring2) both; }
+.sum-stats > div:nth-child(2) { animation-delay: .1s; } .sum-stats > div:nth-child(3) { animation-delay: .2s; }
+.sum-hero h2 { font-size: 1.8rem; letter-spacing: -.02em; }
+
+/* platobná obrazovka */
+.paywall { background: var(--lq-card) !important; backdrop-filter: blur(26px) saturate(1.5); -webkit-backdrop-filter: blur(26px) saturate(1.5); border: 1px solid var(--lq-line) !important; box-shadow: var(--lq-hi), var(--lq-drop) !important; border-radius: 30px !important; }
+.paywall .pw-logo { box-shadow: 0 12px 24px -10px rgba(0, 0, 0, .6) !important; animation: lt-bob 3.4s ease-in-out infinite; }
+.paywall .pw-stamp { transform: none !important; border: 0 !important; border-radius: 999px !important; padding: 6px 14px !important; background: var(--pill-red); color: #fff8ee !important; font-weight: 700; box-shadow: 0 8px 18px -8px rgba(216, 48, 63, .8); }
+.pw-tier { background: var(--lq-btn) !important; border: 1px solid var(--lq-field-line) !important; border-radius: 22px !important; box-shadow: var(--lq-hi) !important; transition: transform .35s var(--spring2); }
+.pw-tier.sel { border-color: rgba(216, 48, 63, .8) !important; box-shadow: var(--lq-hi), 0 0 0 1px rgba(216, 48, 63, .6), 0 16px 34px -16px rgba(216, 48, 63, .7) !important; transform: scale(1.02); }
+.pw-tier .btn.primary { background: var(--pill-red) !important; }
+
+/* nastavenia, zoznamy, hlášky */
+.set-row, .list-item { transition: background .2s, transform .3s var(--spring2); }
+.set-row:active, .list-item:active { transform: scale(.98); }
+.set-ic { border-radius: 50% !important; background: var(--lq-btn) !important; border: 1px solid var(--lq-field-line); }
+.seg, .lang-pill { background: var(--lq-btn) !important; border: 1px solid var(--lq-field-line) !important; border-radius: 999px !important; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.seg-btn.active, .lang-pill button.on { background: var(--pill-red) !important; color: #fff8ee !important; border-radius: 999px !important; }
+#toast { background: var(--lq-sheet) !important; color: var(--text) !important; backdrop-filter: blur(20px) saturate(1.5) !important; -webkit-backdrop-filter: blur(20px) saturate(1.5) !important; border: 1px solid var(--lq-line) !important; border-radius: 999px !important; box-shadow: var(--lq-hi), 0 14px 30px -14px rgba(0, 0, 0, .7) !important; }
+.badge, .count-pill { background: rgba(216, 48, 63, .18) !important; color: inherit; }
+.badge.done { background: rgba(120, 200, 140, .18) !important; }
+.demo-badge { background: var(--lq-btn) !important; border: 1px solid var(--lq-field-line) !important; border-radius: 999px !important; color: var(--text) !important; }
+.back-link { display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px; border-radius: 999px; background: var(--lq-btn); border: 1px solid var(--lq-field-line); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.ex-hero { animation: lt-rise .8s var(--spring2) both, lt-bob 4s ease-in-out infinite 1s; }
+/* úvod (hero) na Dnes – sklenené dlaždice a jemne pohyblivá fotka */
+.hero.hero-photo { box-shadow: var(--lq-hi), 0 24px 44px -22px rgba(0, 0, 0, .85) !important; border: 1px solid var(--lq-line) !important; }
+.hero-tile { background: rgba(255, 255, 255, .14) !important; border: 1px solid rgba(255, 255, 255, .2) !important; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35) !important; border-radius: 20px !important; }
+/* dotazník – voľby ako sklenené pilulky */
+.pick span { border-radius: 999px !important; background: var(--lq-btn) !important; border: 1px solid var(--lq-field-line) !important; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: transform .35s var(--spring2), background .2s !important; }
+.pick input:checked + span { background: var(--pill-red) !important; border-color: transparent !important; box-shadow: 0 8px 18px -10px rgba(216, 48, 63, .9), inset 0 1px 1px rgba(255, 255, 255, .5) !important; animation: lt-pop .4s var(--spring2); }
+.pick:active span { transform: scale(.94); }
+/* pole vnútri krokovača nemá vlastný rámik */
+.stepper input { background: transparent !important; border: 0 !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+/* živý tréning a dialógy priesvitnejšie, aby presvitalo farebné pozadie */
+:root { --lq-sheet: rgba(30, 20, 17, .5); }
+@media (prefers-color-scheme: light) { :root { --lq-sheet: rgba(255, 248, 240, .62); } }
+dialog form { background: transparent !important; }
+/* odškrtnutá séria – lesklá zelená */
+.lset.done .lcheck { background: radial-gradient(circle at 35% 30%, #8fe0a0, #3f9e57 60%, #2a7440) !important; color: #fff !important; border: 0 !important; box-shadow: 0 8px 18px -10px rgba(63, 158, 87, .9), inset 0 1px 1px rgba(255, 255, 255, .55) !important; }
