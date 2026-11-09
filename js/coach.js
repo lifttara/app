@@ -389,7 +389,7 @@ render = function (...args) {
   const r = renderWithoutCoach.apply(this, args);
   const sec = coachSection(h);
   document.querySelectorAll('[data-nav]').forEach((a) => a.classList.toggle('active', a.dataset.nav === sec));
-  if (render.coachSec !== sec) { render.coachSec = sec; if (typeof moveNavInd === 'function') moveNavInd(); }
+  render.coachSec = sec; if (typeof moveNavInd === 'function') moveNavInd(); // vždy – app.js mohol indikátor posunúť inam
   return r;
 };
 

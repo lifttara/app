@@ -2537,3 +2537,111 @@ html body h1 { text-shadow: 3px 3px 0 rgba(198, 42, 60, .45); }
   .set-col .set-group, .set-col .set-profile { max-width: none; }
   .set-col > :first-child { margin-top: 0; }
 }
+/* =========================================================
+   Redizajn 4 – nový vzhľad (farby Lift Tara, sklenené karty,
+   zaoblené tlačidlá, plávajúce menu, piktogramy v 3D krúžkoch)
+   ========================================================= */
+:root {
+  --r-card: 24px;
+  --glass-card: rgba(44, 34, 29, .62);
+  --glass-line: rgba(255, 255, 255, .07);
+  --glass-shadow: 0 14px 34px -20px rgba(0, 0, 0, .8);
+  --pic-bg: #f8f0e4;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --glass-card: rgba(255, 250, 242, .72);
+    --glass-line: rgba(255, 255, 255, .85);
+    --glass-shadow: 0 12px 30px -18px rgba(90, 55, 30, .38);
+  }
+}
+/* pozadie – jemný teplý prechod, bez zrna */
+html body { background: radial-gradient(70% 45% at 100% 0%, rgba(198, 42, 60, .14), transparent 70%), linear-gradient(170deg, #1c1512 0%, #15100e 60%); background-attachment: fixed; }
+@media (prefers-color-scheme: light) { html body { background: linear-gradient(170deg, #fbf6ee 0%, #f3e9d9 55%, #ead9c0 100%); background-attachment: fixed; } }
+html body::after { display: none; }
+
+/* písmo – moderné bezpätkové nadpisy (Alfa Slab ostáva v logu) */
+html body h1, html body .hero h1, html body .hero-title, html body .set-who h2 { font-family: var(--font); font-weight: 700; letter-spacing: -.025em !important; text-shadow: none !important; }
+html body .hero-title { font-weight: 600; }
+h2 { letter-spacing: -.01em; }
+.greta .greta-bubble b, .paywall .pw-stamp { font-family: var(--font); font-weight: 700; letter-spacing: .08em; }
+
+/* karty – polopriehľadné „sklo“, zaoblené, jemný tieň */
+.card, .set-list, .set-profile, .stat, .greta .greta-bubble, .topbar, .nav {
+  background-image: none !important;
+}
+.card, .set-list, .set-profile, .stat, .greta .greta-bubble {
+  background-color: var(--glass-card) !important;
+  backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  border: 1px solid var(--glass-line) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+.card, .set-list, .set-profile { border-radius: var(--r-card) !important; }
+.stat { border-radius: 18px !important; }
+.greta .greta-bubble { border-radius: 6px 20px 20px 20px !important; }
+.greta img { transform: none; box-shadow: 0 6px 14px -8px rgba(0, 0, 0, .5); }
+
+/* tlačidlá, čipy a štítky – zaoblené „pilulky“ */
+.btn { border-radius: 999px !important; }
+.btn.primary, .btn.cta { font-family: var(--font) !important; font-weight: 600; letter-spacing: 0 !important; box-shadow: 0 10px 22px -12px rgba(198, 42, 60, .9) !important; }
+.btn.primary:active, .btn.cta:active { transform: scale(.97); box-shadow: none !important; }
+.chip { border-radius: 999px; }
+.chip.active { box-shadow: none; }
+.badge, .count-pill { border: 0; border-radius: 999px; transform: none; background: var(--primary-soft); }
+input, select, textarea, .search { border-radius: 16px; }
+
+/* úvod na obrazovke Dnes – tlačidlo so šípkou v krúžku */
+.hero .btn.primary.cta {
+  flex-direction: row-reverse; justify-content: flex-end; gap: 12px; padding: 6px 22px 6px 6px !important;
+  background: #fff8ee !important; color: #1d1714 !important; box-shadow: 0 14px 30px -16px rgba(0, 0, 0, .8) !important;
+}
+.hero .btn.primary.cta > span[aria-hidden] { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--accent, #c62a3c); color: #fff8ee; }
+.hero .btn.primary.cta > span[aria-hidden] svg { width: 18px; height: 18px; }
+.hero-tile { border-radius: 18px; background: rgba(255, 248, 238, .12); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.hero.hero-photo { border-radius: 28px; }
+
+/* týždeň – dni ako pilulky */
+.week-dots { gap: 6px; }
+.wd { gap: 0; padding: 8px 0 6px; border-radius: 999px; background: var(--glass-card); border: 1px solid var(--glass-line); font-size: .7rem; }
+.wd i { width: 28px; height: 28px; border: 0 !important; background: transparent; box-shadow: none !important; }
+.wd.on { background: var(--accent, #c62a3c); color: #fff8ee; border-color: transparent; }
+.wd.on i { background: transparent; color: #fff8ee; }
+.wd.today { box-shadow: 0 0 0 2px var(--accent, #c62a3c); color: var(--accent, #c62a3c); }
+
+/* menu – aktívna položka plná tmavá (svetlý režim) / krémová (tmavý režim) */
+.nav-ind { background: var(--primary); border-radius: 999px; }
+.nav a.active, .nav.has-ind a.active { color: var(--primary-ink) !important; }
+.nav a { border-radius: 999px; }
+@media (max-width: 899px) {
+  /* mobil: plávajúca lišta s okrúhlymi ikonami */
+  .nav {
+    left: 50%; right: auto; transform: translateX(-50%); width: auto; gap: 6px; padding: 7px;
+    height: auto; border-radius: 999px !important;
+    background: var(--glass-card) !important; border: 1px solid var(--glass-line) !important;
+    box-shadow: 0 16px 34px -14px rgba(0, 0, 0, .55) !important;
+  }
+  .nav a { flex: none; width: 56px; height: 56px; gap: 0; background: rgba(255, 255, 255, .06); }
+  .nav a span:not(.chat-count) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .nav svg { width: 22px; height: 22px; }
+}
+@media (max-width: 899px) and (prefers-color-scheme: light) { .nav a { background: rgba(255, 255, 255, .7); } }
+@media (min-width: 900px) {
+  .nav { border-radius: var(--r-card) !important; background: var(--glass-card) !important; border: 1px solid var(--glass-line) !important; box-shadow: var(--glass-shadow) !important; }
+  .topbar .brand { font-family: var(--font); font-weight: 700; letter-spacing: -.02em !important; }
+}
+
+/* piktogramy cvikov v okrúhlych 3D krúžkoch */
+.ex-pic, .ex-pic.big, .sum-list .ex-pic, .live-tab .ex-pic {
+  border-radius: 50% !important; border: 0 !important; color: #1d1714;
+  background: radial-gradient(circle at 35% 28%, #ffffff 0%, #fbf5ec 45%, #eadcc5 100%) !important;
+  box-shadow: 0 10px 16px -10px rgba(110, 70, 35, .55), inset 0 -3px 6px rgba(160, 120, 80, .14), inset 0 2px 1px rgba(255, 255, 255, .9) !important;
+}
+.ex-hero { border-radius: 50%; }
+.ex-thumb .fg path { fill: none; stroke: #1d1714; stroke-linecap: round; stroke-linejoin: round; }
+.ex-thumb .gap path { fill: none; stroke: var(--pic-bg); stroke-linecap: round; stroke-linejoin: round; }
+.ex-thumb .gap-f { fill: var(--pic-bg); stroke: none; }
+.ex-thumb .hd { fill: #1d1714 !important; stroke: none; }
+.ex-thumb .fl { display: none; }
+.ex-thumb .eq, .ex-thumb .eq path { stroke: #1d1714 !important; }
+.ex-thumb .eq .pl { fill: #c62a3c !important; stroke: none !important; }
+.ex-hero { background: radial-gradient(circle at 35% 28%, #ffffff 0%, #fbf5ec 45%, #eadcc5 100%) !important; border: 0 !important; box-shadow: 0 18px 28px -16px rgba(110, 70, 35, .55), inset 0 -5px 10px rgba(160, 120, 80, .14), inset 0 3px 2px rgba(255, 255, 255, .9) !important; }
