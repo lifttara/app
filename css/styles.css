@@ -2925,3 +2925,31 @@ body:has(main .start .wizard) .nav { display: none !important; }
 .start:has(.wizard:not([data-step="0"])) .start-hero { display: none; }
 .start:has(.wizard:not([data-step="0"])) .page-head, .start:has(.wizard:not([data-step="0"])) > .muted { display: none; }
 .start .wizard { margin-top: 8px; }
+
+/* ============ Plynulosť – menej záťaže pre grafiku ============
+   Animované rozmazané fľaky v pozadí nútili prehliadač v každom snímku
+   znova rozmazávať všetky sklenené plochy. Pozadie je teraz statický
+   prechod (vyzerá rovnako) a rozmazanie ostalo len na lište a oknách. */
+.lt-bg i { filter: none !important; animation: none !important; will-change: auto !important; opacity: 1 !important;
+  background: radial-gradient(closest-side, var(--blob) 45%, transparent 100%) !important; }
+.lt-bg i:nth-child(1) { --blob: rgba(198, 42, 60, .7); }
+.lt-bg i:nth-child(2) { --blob: rgba(233, 183, 92, .45); }
+.lt-bg i:nth-child(3) { --blob: rgba(122, 22, 34, .7); }
+@media (prefers-color-scheme: light) {
+  .lt-bg i:nth-child(1) { --blob: rgba(198, 42, 60, .3); }
+  .lt-bg i:nth-child(2) { --blob: rgba(233, 183, 92, .4); }
+  .lt-bg i:nth-child(3) { --blob: rgba(232, 138, 122, .3); }
+}
+/* karty a drobné prvky bez živého rozmazania – pozadie pod nimi je už jemné */
+.card, .set-list, .set-profile, .stat, .greta .greta-bubble, .chip, .tag, .pick span, .seg, .lang-pill,
+.back-link, .sum-stats > div, .sum-list li, .hero-tile, .paywall, .topbar .lang-pill {
+  backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+}
+:root { --lq-card: linear-gradient(135deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, .06)); }
+@media (prefers-color-scheme: light) {
+  :root { --lq-card: linear-gradient(135deg, rgba(255, 255, 255, .85), rgba(255, 250, 242, .62)); }
+}
+/* zostávajúce sklo (lišta, okná) – menší polomer = menej práce */
+.nav, .topbar, dialog, .live, #toast { backdrop-filter: blur(14px) !important; -webkit-backdrop-filter: blur(14px) !important; }
+/* lesklý odlesk len raz, nie donekonečna */
+.week-card::after, .today-plan::after { animation-iteration-count: 1 !important; }
