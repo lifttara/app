@@ -2950,6 +2950,8 @@ body:has(main .start .wizard) .nav { display: none !important; }
   :root { --lq-card: linear-gradient(135deg, rgba(255, 255, 255, .85), rgba(255, 250, 242, .62)); }
 }
 /* zostávajúce sklo (lišta, okná) – menší polomer = menej práce */
-.nav, .topbar, dialog, .live, #toast { backdrop-filter: blur(14px) !important; -webkit-backdrop-filter: blur(14px) !important; }
+.nav, dialog, .live, #toast { backdrop-filter: blur(14px) !important; -webkit-backdrop-filter: blur(14px) !important; }
+/* na počítači je horná lišta priehľadná vrstva nad bočným menu – nesmie ho rozmazať */
+@media (min-width: 900px) { .topbar { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; } }
 /* lesklý odlesk len raz, nie donekonečna */
 .week-card::after, .today-plan::after { animation-iteration-count: 1 !important; }
